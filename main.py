@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Ruta a la carpeta donde están los videos
-VIDEO_FOLDER = "videos/"
+VIDEO_FOLDER = "videos_reflexion/"
 # Extensiones válidas de video
 VALID_EXTENSIONS = (".mp4", ".mov", ".mkv", ".avi")
 # URL RTMP de YouTube
@@ -25,10 +25,9 @@ def stream_video(video_path):
         "-i", video_path,
         "-vf", "scale=w=2560:h=1440:force_original_aspect_ratio=decrease,pad=2560:1440:(ow-iw)/2:(oh-ih)/2",
         "-c:v", "libx264",
-        "-b:v", "13500k",           # 👉 Fuerza bitrate real
+        "-preset", "faster",
         "-maxrate", "13500k",
         "-bufsize", "27000k",
-        "-preset", "faster",
         "-pix_fmt", "yuv420p",
         "-g", "50",
         "-c:a", "aac",
@@ -37,8 +36,6 @@ def stream_video(video_path):
         "-f", "flv",
         RTMP_URL
     ])
-
-
     process.wait()
 
 def stream_loop():
